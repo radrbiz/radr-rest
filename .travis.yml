@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- '0.10'
+install:
+- npm install
+- cp config-example.json config.json
+script:
+- npm test --coverage
+after_success:
+- npm run coveralls
+env:
+  global:
+    secure: LuOqYk32n2VrtHgojSP4ugk4ig7/QLNXRRUWFqPy0ZEA+HxMsaPr+uylLMEi0yj43sIa+nAu9xdblkkzfcYzGZIjJRWV5L3CGZZONps9snspx7R9ZBbmuvcvlZmORxzYeJBoFC1C5VKR/lciFT3er8j7nagzMEociY/bR1lPGBw=
+notifications:
+  email: false

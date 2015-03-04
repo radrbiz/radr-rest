@@ -1,0 +1,9 @@
+*log
+node_modules/
+accounts.json
+*.sqlite
+config.json
+.DS_Store
+coverage/
+.idea/
+*.db
