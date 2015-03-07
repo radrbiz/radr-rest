@@ -1,6 +1,6 @@
 var _                       = require('lodash');
 var Promise                 = require('bluebird');
-var ripple                  = require('ripple-lib');
+var radr                  = require('radr-lib');
 var remote                  = require('./../lib/remote.js');
 var transactions            = require('./transactions');
 var SubmitTransactionHooks  = require('./../lib/submit_transaction_hooks.js');
@@ -30,7 +30,7 @@ const DefaultPageLimit = 200;
  *  @param {String} [request.query.ledger]   - The ledger index to query against (required if request.query.marker is present)
  *
  *  @url
- *  @param {RippleAddress} request.params.account  - The ripple address to query orders
+ *  @param {RadrAddress} request.params.account  - The ripple address to query orders
  *
  *  @param {Express.js Response} response
  *  @param {Express.js Next} next
@@ -50,8 +50,8 @@ function getOrders(request, response, next) {
   .catch(next);
 
   function validateOptions(options) {
-    if (!ripple.UInt160.is_valid(options.account)) {
-      return Promise.reject(new InvalidRequestError('Parameter is not a valid Ripple address: account'));
+    if (!radr.UInt160.is_valid(options.account)) {
+      return Promise.reject(new InvalidRequestError('Parameter is not a valid Radr address: account'));
     }
 
     return Promise.resolve(options);
@@ -99,8 +99,8 @@ function getOrders(request, response, next) {
   function getParsedOrders(offers) {
     return _.reduce(offers, function(orders, off) {
       var sequence = off.seq;
-      var passive = off.flags === ripple.Remote.flags.offer.Passive;
-      var type = off.flags === ripple.Remote.flags.offer.Sell ? 'sell' : 'buy'
+      var passive = off.flags === radr.Remote.flags.offer.Passive;
+      var type = off.flags === radr.Remote.flags.offer.Sell ? 'sell' : 'buy'
 
       var taker_gets = utils.parseCurrencyAmount(off.taker_gets);
       var taker_pays = utils.parseCurrencyAmount(off.taker_pays);
@@ -138,9 +138,9 @@ function getOrders(request, response, next) {
 };
 
 /**
- *  Submit an order to the ripple network
+ *  Submit an order to the radr network
  *
- *  More information about order flags can be found at https://ripple.com/build/transactions/#offercreate-flags
+ *  More information about order flags can be found at https://radr.com/build/transactions/#offercreate-flags
  *
  *  @body
  *  @param {Order} request.body.order                         - Object that holds information about the order
@@ -150,10 +150,10 @@ function getOrders(request, response, next) {
  *  @param {Boolean} [request.body.order.fill_or_kill]        - Set whether order is fill or kill
  *  @param {String} request.body.order.taker_gets             - Amount of a currency the taker receives for consuming this order
  *  @param {String} request.body.order.taker_pays             - Amount of a currency the taker must pay for consuming this order
- *  @param {String} request.body.secret                       - YOUR secret key. Do NOT submit to an unknown ripple-rest server
+ *  @param {String} request.body.secret                       - YOUR secret key. Do NOT submit to an unknown radr-rest server
  *  
  *  @query
- *  @param {String "true"|"false"} request.query.validated    - used to force request to wait until rippled has finished validating the submitted transaction
+ *  @param {String "true"|"false"} request.query.validated    - used to force request to wait until radrd has finished validating the submitted transaction
  *
  *  @param {Express.js Response} response
  *  @param {Express.js Next} next
@@ -199,8 +199,8 @@ function placeOrder(request, response, next) {
       }
     }
 
-    if (!ripple.UInt160.is_valid(params.account)) {
-      return callback(new errors.InvalidRequestError('Parameter is not a valid Ripple address: account'));
+    if (!radr.UInt160.is_valid(params.account)) {
+      return callback(new errors.InvalidRequestError('Parameter is not a valid Radr address: account'));
     } else if (!/^buy|sell$/.test(params.order.type)) {
       return callback(new InvalidRequestError('Parameter must be "buy" or "sell": type'));
     } else if (!_.isUndefined(params.order.passive) && !_.isBoolean(params.order.passive)) {
@@ -222,7 +222,7 @@ function placeOrder(request, response, next) {
     var takerPays = params.order.taker_pays.currency !== 'XRP' ? params.order.taker_pays : utils.xrpToDrops(params.order.taker_pays.value);
     var takerGets = params.order.taker_gets.currency !== 'XRP' ? params.order.taker_gets : utils.xrpToDrops(params.order.taker_gets.value);
 
-    transaction.offerCreate(params.account, ripple.Amount.from_json(takerPays), ripple.Amount.from_json(takerGets));
+    transaction.offerCreate(params.account, radr.Amount.from_json(takerPays), radr.Amount.from_json(takerGets));
 
     transactions.setTransactionBitFlags(transaction, {
       input: params.order,
@@ -236,13 +236,13 @@ function placeOrder(request, response, next) {
 };
 
 /**
- *  Cancel an order in the ripple network
+ *  Cancel an order in the radr network
  *
  *  @url
  *  @param {Number String} request.params.sequence - sequence number of order to cancel
  *
  *  @query
- *  @param {String "true"|"false"} request.query.validated - used to force request to wait until rippled has finished validating the submitted transaction
+ *  @param {String "true"|"false"} request.query.validated - used to force request to wait until radrd has finished validating the submitted transaction
  *
  *  @param {Express.js Response} response
  *  @param {Express.js Next} next
@@ -276,8 +276,8 @@ function cancelOrder(request, response, next) {
   function validateParams(callback) {
     if (!(Number(params.sequence) >= 0)) {
       callback(new InvalidRequestError('Invalid parameter: sequence. Sequence must be a positive number'));
-    } else if (!ripple.UInt160.is_valid(params.account)) {
-      callback(new InvalidRequestError('Parameter is not a valid Ripple address: account'));
+    } else if (!radr.UInt160.is_valid(params.account)) {
+      callback(new InvalidRequestError('Parameter is not a valid Radr address: account'));
     } else {
       callback();
     }
@@ -292,9 +292,9 @@ function cancelOrder(request, response, next) {
  *  Get the most recent spapshot of the order book for a currency pair
  *
  *  @url
- *  @param {RippleAddress} request.params.account - The ripple address to use as point-of-view (returns unfunded orders for this account)
- *  @param {String ISO 4217 Currency Code + RippleAddress} request.params.base    - Base currency as currency+issuer
- *  @param {String ISO 4217 Currency Code + RippleAddress} request.params.counter - Counter currency as currency+issuer
+ *  @param {RadrAddress} request.params.account - The radr address to use as point-of-view (returns unfunded orders for this account)
+ *  @param {String ISO 4217 Currency Code + RadrAddress} request.params.base    - Base currency as currency+issuer
+ *  @param {String ISO 4217 Currency Code + RadrAddress} request.params.counter - Counter currency as currency+issuer
  *
  *  @query
  *  @param {String} [request.query.limit] - Set a limit to the number of results returned
@@ -328,8 +328,8 @@ function getOrderBook(request, response, next) {
 
   function validateOptions(options) {
     return new Promise(function(resolve, reject) {
-      if (!ripple.UInt160.is_valid(options.account)) {
-        reject(new InvalidRequestError('Parameter is not a valid Ripple address: account'));
+      if (!radr.UInt160.is_valid(options.account)) {
+        reject(new InvalidRequestError('Parameter is not a valid Radr address: account'));
       }
 
       if (!options.base.currency) {
@@ -340,7 +340,7 @@ function getOrderBook(request, response, next) {
         reject(new InvalidRequestError('Invalid parameter: base. Must be a currency string in the form currency+counterparty'));
       }
 
-      if (options.base.currency !== 'XRP' && (!options.base.issuer || !ripple.UInt160.is_valid(options.base.issuer))) {
+      if (options.base.currency !== 'XRP' && (!options.base.issuer || !radr.UInt160.is_valid(options.base.issuer))) {
         reject(new InvalidRequestError('Invalid parameter: base. Must be a currency string in the form currency+counterparty'));
       }
 
@@ -352,7 +352,7 @@ function getOrderBook(request, response, next) {
         reject(new InvalidRequestError('Invalid parameter: counter. Must be a currency string in the form currency+counterparty'));
       }
 
-      if (options.counter.currency !== 'XRP' && (!options.counter.issuer || !ripple.UInt160.is_valid(options.counter.issuer))) {
+      if (options.counter.currency !== 'XRP' && (!options.counter.issuer || !radr.UInt160.is_valid(options.counter.issuer))) {
         reject(new InvalidRequestError('Invalid parameter: counter. Must be a currency string in the form currency+counterparty'));
       }
 
@@ -449,8 +449,8 @@ function getOrderBook(request, response, next) {
       var sequence = off.Sequence;
 
       // Transaction Flags
-      var passive = off.Flags === ripple.Remote.flags.offer.Passive;
-      var sell = off.Flags === ripple.Remote.flags.offer.Sell;
+      var passive = off.Flags === radr.Remote.flags.offer.Passive;
+      var sell = off.Flags === radr.Remote.flags.offer.Sell;
 
       var taker_gets_total =  utils.parseCurrencyAmount(off.TakerGets);
       var taker_gets_funded = off.taker_gets_funded ? utils.parseCurrencyAmount(off.taker_gets_funded) : taker_gets_total;
@@ -495,7 +495,7 @@ function getOrderBook(request, response, next) {
  *  Get an Order transaction (`OfferCreate` or `OfferCancel`)
  *
  *  @url
- *  @param {RippleAddress} request.params.account
+ *  @param {RadrAddress} request.params.account
  *  @param {String} request.params.identifier
  *
  *  @param {Express.js Request} request
@@ -512,8 +512,8 @@ function getOrder(request, response, next) {
 
   function validateOptions(options) {
     return new Promise(function(resolve, reject) {
-      if (!ripple.UInt160.is_valid(options.account)) {
-        reject(new InvalidRequestError('Parameter is not a valid Ripple address: account'));
+      if (!radr.UInt160.is_valid(options.account)) {
+        reject(new InvalidRequestError('Parameter is not a valid Radr address: account'));
       }
       if (!validator.isValid(options.identifier, 'Hash256')) {
         reject(new InvalidRequestError('Parameter is not a valid transaction hash: identifier'));

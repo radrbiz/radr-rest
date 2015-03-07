@@ -1,6 +1,6 @@
 var _                = require('lodash');
 var addresses        = require('./../fixtures').addresses;
-var SerializedObject = require('ripple-lib').SerializedObject;
+var SerializedObject = require('radr-lib').SerializedObject;
 
 module.exports.VALID_TRANSACTION_HASH = 'F4AB442A6D4CBB935D66E1DA7309A5FC71C7143ED4049053EC14E3875B0CF9BF';
 module.exports.INVALID_TRANSACTION_HASH = 'XF4AB442A6D4CBB935D66E1DA7309A5FC71C7143ED4049053EC14E3875B0CF9BF';

@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var assert = require('assert');
-var ripple = require('ripple-lib');
+var radr = require('radr-lib');
 var testutils = require('./testutils');
 var fixtures = require('./fixtures').trustlines;
 var errors = require('./fixtures').errors;
@@ -651,7 +651,7 @@ suite('post trustlines', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'), 'Missing signed transaction blob');
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'TrustSet');
       assert.strictEqual(so.Flags, 2147483648);
@@ -704,7 +704,7 @@ suite('post trustlines', function() {
 
     self.wss.once('request_submit', function(message, conn) {
       assert.strictEqual(message.command, 'submit');
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'TrustSet');
       assert.strictEqual(so.LimitAmount.value, '0');
@@ -744,10 +744,10 @@ suite('post trustlines', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'), 'Missing signed transaction blob');
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'TrustSet');
-      assert((so.Flags & ripple.Transaction.flags.TrustSet.NoRipple) > 0);
+      assert((so.Flags & radr.Transaction.flags.TrustSet.NoRipple) > 0);
 
       conn.send(fixtures.submitTrustlineResponse(message, {
         hash: hash,
@@ -784,10 +784,10 @@ suite('post trustlines', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'), 'Missing signed transaction blob');
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'TrustSet');
-      assert((so.Flags & ripple.Transaction.flags.TrustSet.SetFreeze) > 0);
+      assert((so.Flags & radr.Transaction.flags.TrustSet.SetFreeze) > 0);
 
       conn.send(fixtures.submitTrustlineResponse(message, {
         hash: hash,
@@ -824,10 +824,10 @@ suite('post trustlines', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'), 'Missing signed transaction blob');
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'TrustSet');
-      assert((so.Flags & ripple.Transaction.flags.TrustSet.ClearFreeze) > 0);
+      assert((so.Flags & radr.Transaction.flags.TrustSet.ClearFreeze) > 0);
 
       conn.send(fixtures.submitTrustlineResponse(message, {
         hash: hash,
@@ -864,10 +864,10 @@ suite('post trustlines', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'), 'Missing signed transaction blob');
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'TrustSet');
-      assert((so.Flags & ripple.Transaction.flags.TrustSet.SetAuth) > 0);
+      assert((so.Flags & radr.Transaction.flags.TrustSet.SetAuth) > 0);
 
       conn.send(fixtures.submitTrustlineResponse(message, {
         hash: hash,

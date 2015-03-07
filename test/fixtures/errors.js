@@ -16,14 +16,14 @@ module.exports.RESTInvalidAccount = JSON.stringify({
   success: false,
   error_type: 'invalid_request',
   error: 'restINVALID_PARAMETER',
-  message: 'Parameter is not a valid Ripple address: account'
+  message: 'Parameter is not a valid Radr address: account'
 });
 
 module.exports.RESTInvalidCounterparty = JSON.stringify({
   success: false,
   error_type: 'invalid_request',
   error: 'restINVALID_PARAMETER',
-  message: 'Parameter is not a valid Ripple address: counterparty'
+  message: 'Parameter is not a valid Radr address: counterparty'
 });
 
 module.exports.RESTInvalidTransactionHashOrClientResourceID = JSON.stringify({
@@ -96,11 +96,11 @@ module.exports.RESTAccountNotFound = JSON.stringify({
   message: 'Account not found.'
 });
 
-module.exports.RESTCannotConnectToRippleD = JSON.stringify({
+module.exports.RESTCannotConnectToRadrD = JSON.stringify({
   success: false,
   error_type: 'connection',
-  error: 'restRIPPLED_NETWORK_ERR',
-  message: 'Cannot connect to rippled'
+  error: 'restRADRD_NETWORK_ERR',
+  message: 'Cannot connect to radrd'
 });
 
 module.exports.RESTResponseLedgerSequenceTooHigh = JSON.stringify({

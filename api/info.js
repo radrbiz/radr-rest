@@ -9,11 +9,11 @@ var utils     = require('./../lib/utils.js');
 function getServerStatus(request, response, next) {
   serverlib.getStatus(remote, function(error, status) {
     if (error) {
-      return next(new errors.RippledNetworkError(error.message));
+      return next(new errors.RadrdNetworkError(error.message));
     }
 
     respond.success(response, _.extend({
-      api_documentation_url: 'https://github.com/ripple/ripple-rest'
+      api_documentation_url: 'https://github.com/radr/radr-rest'
     }, status));
   });
 };

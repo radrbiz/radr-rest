@@ -3,13 +3,13 @@ var assert = require('assert-diff');
 var async = require('async');
 var supertest = require('supertest');
 var WSS = require('ws').Server;
-var ripple = require('ripple-lib');
+var radr = require('radr-lib');
 var fixtures = require('./fixtures').startup;
 var addresses = require('./fixtures').addresses;
 var app = require('../lib/express_app');
 var dbinterface = require('../lib/db-interface');
 var crypto = require('crypto');
-var UInt256 = ripple.UInt256;
+var UInt256 = radr.UInt256;
 
 const LEDGER_OFFSET = 3;
 

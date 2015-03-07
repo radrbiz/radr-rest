@@ -6,7 +6,7 @@
   "properties": {
     "account": {
       "description": "The Ripple address of the account to which the notification pertains",
-      "$ref": "RippleAddress"
+      "$ref": "RadrAddress"
     },
     "type": {
       "description": "The resource type this notification corresponds to. Possible values are \"payment\", \"order\", \"trustline\", \"accountsettings\"",

@@ -5,7 +5,7 @@ var assert        = require('assert');
 var ws            = require('ws');
 var route         = new (require('events').EventEmitter);
 var fixtures      = require('./fixtures')._payments;
-var RL            = require('ripple-lib');
+var RL            = require('radr-lib');
 
 var testutils = { };
 
@@ -23,7 +23,7 @@ testutils.hasKeys = function(obj,keys) {
     return { hasAllKeys : hasAllKeys, missing : missing }
 }
 
-// used to mark the orderings and count of incoming rippled
+// used to mark the orderings and count of incoming radrd
 testutils.orderlist = function(list) {
     // list = [{command:<command>}, ... ]
     var _list = list;
@@ -37,7 +37,7 @@ testutils.orderlist = function(list) {
         if ((_list[idx]) && (_list[idx].command === command)) {
             idx++
         } else {
-            throw new Error("out of order rippled command",command)
+            throw new Error("out of order radrd command",command)
         }
     }
     this.test = function() {
@@ -66,10 +66,10 @@ var orderlist = new testutils.orderlist;
 
 
 suite('payments', function() {
-  var rippled;
+  var radrd;
 
   suiteSetup(function(done) {
-    rippled = new ws.Server({port: 5150});
+    radrd = new ws.Server({port: 5150});
 
     route.on('ping', fixtures.ping);
     route.on('subscribe', fixtures.subscribe);
@@ -81,7 +81,7 @@ suite('payments', function() {
     route.on('submit',fixtures.submit);
     route.on('tx', fixtures.tx);
 
-    rippled.on('connection', fixtures.connection.bind({route:route}));
+    radrd.on('connection', fixtures.connection.bind({route:route}));
 
     _app.remote.once('connect', function() {
       _app.remote.getServer().once('ledger_closed', function() {
@@ -100,7 +100,7 @@ suite('payments', function() {
 
   suiteTeardown(function(done) {
     _app.remote.once('disconnect', function() {
-      rippled.close();
+      radrd.close();
       done()
     });
 
@@ -318,7 +318,7 @@ suite('payments', function() {
 
     app.get('/v1/server')
       .end(function(err, resp) {
-        store.reserve_base_xrp = resp.body.rippled_server_status.validated_ledger.reserve_base_xrp;
+        store.reserve_base_xrp = resp.body.radrd_server_status.validated_ledger.reserve_base_xrp;
         assert.equal(orderlist.test(),true);
         orderlist.reset();
         done();
@@ -793,7 +793,7 @@ suite('payments', function() {
 
 
   /**
-   *  The tests below don't test the input for rippled
+   *  The tests below don't test the input for radrd
    *  These should be rewritten in the payments.js class
    */
 

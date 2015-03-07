@@ -1,6 +1,6 @@
 var _                   = require('lodash');
 var async               = require('async');
-var ripple              = require('ripple-lib');
+var radr              = require('radr-lib');
 var transactions        = require('./transactions');
 var serverLib           = require('../lib/server-lib');
 var remote              = require('./../lib/remote.js');
@@ -22,7 +22,7 @@ module.exports = {
  *  @param {Remote} $.remote
  *  @param {/lib/db-interface} $.dbinterface
  *  @param {/lib/config-loader} $.config
- *  @param {RippleAddress} req.params.account
+ *  @param {RadrAddress} req.params.account
  *  @param {Hex-encoded String|ResourceId} req.params.identifier
  *  @param {Express.js Response} res
  *  @param {Express.js Next} next
@@ -64,7 +64,7 @@ function getNotification(request, response, next) {
  *
  *  @param {Remote} $.remote
  *  @param {/lib/db-interface} $.dbinterface
- *  @param {RippleAddress} req.params.account
+ *  @param {RadrAddress} req.params.account
  *  @param {Hex-encoded String|ResourceId} req.params.identifier
  *  @param {Express.js Response} res
  *  @param {Function} callback
@@ -78,9 +78,9 @@ function getNotificationHelper(request, response, callback) {
   var identifier = request.params.identifier
 
   if (!account) {
-    return callback(new errors.InvalidRequestError('Missing parameter: account. Must be a valid Ripple Address'));
-  } else if (!ripple.UInt160.is_valid(account)) {
-    return callback(new errors.InvalidRequestError('Parameter is not a valid Ripple address: account'));
+    return callback(new errors.InvalidRequestError('Missing parameter: account. Must be a valid Radr Address'));
+  } else if (!radr.UInt160.is_valid(account)) {
+    return callback(new errors.InvalidRequestError('Parameter is not a valid Radr address: account'));
   }
 
   function getTransaction(async_callback) {
@@ -96,8 +96,8 @@ function getNotificationHelper(request, response, callback) {
         async_callback(null, baseTransaction);
       } else {
         async_callback(new errors.NotFoundError('Cannot Get Notification. ' +
-          'This transaction is not in the ripple\'s complete ledger set. ' +
-          'Because there is a gap in the rippled\'s historical database it is ' +
+          'This transaction is not in the radr\'s complete ledger set. ' +
+          'Because there is a gap in the radrd\'s historical database it is ' +
           'not possible to determine the transactions that precede this one')
         );
       }
@@ -135,7 +135,7 @@ function getNotificationHelper(request, response, callback) {
 
 /**
  *  Find the previous and next transaction hashes or
- *  client_resource_ids using both the rippled and
+ *  client_resource_ids using both the radrd and
  *  local database. Report errors to the client using res.json
  *  or pass the notificationDetails with the added fields
  *  back to the callback.
@@ -143,8 +143,8 @@ function getNotificationHelper(request, response, callback) {
  *  @param {Remote} $.remote
  *  @param {/lib/db-interface} $.dbinterface
  *  @param {Express.js Response} res
- *  @param {RippleAddress} notificationDetails.account
- *  @param {Ripple Transaction in JSON Format} notificationDetails.transaction
+ *  @param {RadrAddress} notificationDetails.account
+ *  @param {Radr Transaction in JSON Format} notificationDetails.transaction
  *  @param {Hex-encoded String|ResourceId} notificationDetails.identifier
  *  @param {Function} callback
  *
@@ -193,7 +193,7 @@ function attachPreviousAndNextTransactionIdentifiers(response, notificationDetai
         earliestFirst: earliestFirst
       };
 
-      // In rippled -1 corresponds to the first or last ledger
+      // In radrd -1 corresponds to the first or last ledger
       // in its database, depending on whether it is the min or max value
       if (params.earliestFirst) {
         params.ledger_index_max = -1;

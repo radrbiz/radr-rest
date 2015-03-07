@@ -1,4 +1,4 @@
-const Wallet  = require('ripple-lib').Wallet;
+const Wallet  = require('radr-lib').Wallet;
 const errors  = require('./../lib/errors.js');
 const respond = require('./../lib/response-handler.js');
 

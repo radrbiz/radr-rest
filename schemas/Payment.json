@@ -6,7 +6,7 @@
   "properties": {
     "source_account": {
       "description": "The Ripple account address of the Payment sender",
-      "$ref": "RippleAddress"
+      "$ref": "RadrAddress"
     },
     "source_tag": {
       "description": "A string representing an unsigned 32-bit integer most commonly used to refer to a sender's hosted account at a Ripple gateway",
@@ -25,7 +25,7 @@
       "$ref": "FloatString"
     },
     "destination_account": {
-      "$ref": "RippleAddress"
+      "$ref": "RadrAddress"
     },
     "destination_tag": {
       "description": "A string representing an unsigned 32-bit integer most commonly used to refer to a receiver's hosted account at a Ripple gateway",

@@ -1,7 +1,7 @@
 var _                       = require('lodash');
 var assert                  = require('assert');
 var async                   = require('async');
-var ripple                  = require('ripple-lib');
+var radr                  = require('radr-lib');
 var transactions            = require('./transactions.js');
 var SubmitTransactionHooks  = require('./../lib/submit_transaction_hooks.js');
 var remote                  = require('./../lib/remote.js');
@@ -34,8 +34,8 @@ const AccountRootFields = {
 };
 
 const AccountSetIntFlags = {
-  NoFreeze:       { name:   'no_freeze', value: ripple.Transaction.set_clear_flags.AccountSet.asfNoFreeze },
-  GlobalFreeze:   { name:   'global_freeze', value: ripple.Transaction.set_clear_flags.AccountSet.asfGlobalFreeze }
+  NoFreeze:       { name:   'no_freeze', value: radr.Transaction.set_clear_flags.AccountSet.asfNoFreeze },
+  GlobalFreeze:   { name:   'global_freeze', value: radr.Transaction.set_clear_flags.AccountSet.asfGlobalFreeze }
 };
 
 const AccountSetFlags = {
@@ -165,8 +165,8 @@ function setTransactionFields(transaction, input, fieldSchema) {
  *  @param {Express.js Next} next
  */
 function getSettings(request, response, next) {
-  if (!ripple.UInt160.is_valid(request.param('account'))) {
-    return next(new errors.InvalidRequestError('Parameter is not a valid Ripple address: account'));
+  if (!radr.UInt160.is_valid(request.param('account'))) {
+    return next(new errors.InvalidRequestError('Parameter is not a valid Radr address: account'));
   }
 
   remote.requestAccountInfo({account: request.params.account}, function(error, info) {
@@ -235,9 +235,9 @@ function changeSettings(request, response, next) {
     if (typeof params.settings !== 'object') {
       return callback(new InvalidRequestError('Parameter missing: settings'));
     }
-    if (!ripple.UInt160.is_valid(params.account)) {
+    if (!radr.UInt160.is_valid(params.account)) {
       return callback(new InvalidRequestError(
-        'Parameter is not a valid Ripple address: account'));
+        'Parameter is not a valid Radr address: account'));
     }
     if (!/(undefined|string)/.test(typeof params.settings.domain)) {
       return callback(new InvalidRequestError(

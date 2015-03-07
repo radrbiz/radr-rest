@@ -1,5 +1,5 @@
 var assert = require('assert');
-var ripple = require('ripple-lib');
+var radr = require('radr-lib');
 var testutils = require('./testutils');
 var fixtures = require('./fixtures').notifications;
 var errors = require('./fixtures').errors;

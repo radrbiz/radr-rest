@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var addresses = require('./../fixtures').addresses;
 var paths = require('./paths');
-var SerializedObject = require('ripple-lib').SerializedObject;
+var SerializedObject = require('radr-lib').SerializedObject;
 
 const ORDER_HASH = '71AE74B03DE3B9A06C559AD4D173A362D96B7D2A5AA35F56B9EF21543D627F34';
 const DEFAULTS = {
@@ -438,7 +438,7 @@ module.exports.requestCancelResponse = function(request, options) {
   });
 };
 
-module.exports.rippledSubmitErrorResponse = function(request, options) {
+module.exports.radrdSubmitErrorResponse = function(request, options) {
   options = options || {};
   _.defaults(options, LIB_DEFAULTS);
 
@@ -468,7 +468,7 @@ module.exports.rippledSubmitErrorResponse = function(request, options) {
   });
 };
 
-module.exports.rippledCancelErrorResponse = function(request, options) {
+module.exports.radrdCancelErrorResponse = function(request, options) {
   options = options || {};
   _.defaults(options, LIB_DEFAULTS);
 

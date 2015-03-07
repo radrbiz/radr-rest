@@ -79,7 +79,7 @@
 
 + New endpoint to generate an address/secret pair, `/wallet/new`
 
-+ Expose `router` and `remote` as `RippleRestPlugin` to use as a plugin for other modules
++ Expose `router` and `remote` as `RadrRestPlugin` to use as a plugin for other modules
 
 + Log all connected servers, add reconnect to servers on SIGHUP
 

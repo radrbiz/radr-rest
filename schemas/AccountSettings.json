@@ -5,15 +5,15 @@
   "type": "object",
   "properties": {
     "account": {
-      "description": "The Ripple address of the account in question",
-      "$ref": "RippleAddress"
+      "description": "The Radr address of the account in question",
+      "$ref": "RadrAddress"
     },
     "regular_key": {
       "description": "The hash of an optional additional public key that can be used for signing and verifying transactions",
-      "$ref": "RippleAddress"
+      "$ref": "RadrAddress"
     },
     "domain": {
-      "description": "The domain associated with this account. The ripple.txt file can be looked up to verify this information",
+      "description": "The domain associated with this account. The radr.txt file can be looked up to verify this information",
       "$ref": "URL"
     },
     "email_hash": {

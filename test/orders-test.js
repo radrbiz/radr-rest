@@ -1,12 +1,12 @@
 var _         = require('lodash');
 var assert    = require('assert');
-var ripple    = require('ripple-lib');
+var radr    = require('radr-lib');
 var testutils = require('./testutils');
 var fixtures  = require('./fixtures').orders;
 var errors    = require('./fixtures').errors;
 var addresses = require('./fixtures').addresses;
 var utils     = require('./../lib/utils');
-var Currency  = require('ripple-lib').Currency;
+var Currency  = require('radr-lib').Currency;
 
 const HEX_CURRENCY = '0158415500000000C1F76FF6ECB0BAC600000000';
 const ISSUER = 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B';
@@ -380,7 +380,7 @@ suite('post orders', function() {
 
     self.wss.once('request_submit', function(message, conn) {
       assert.strictEqual(message.command, 'submit');
-      conn.send(fixtures.rippledSubmitErrorResponse(message, {
+      conn.send(fixtures.radrdSubmitErrorResponse(message, {
         engine_result: 'tecUNFUNDED_OFFER',
         engine_result_code: 103,
         engine_result_message: 'Insufficient balance to fund created offer.',
@@ -418,7 +418,7 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
       assert.strictEqual(so.Account, addresses.VALID);
       assert.strictEqual(so.TransactionType, 'OfferCreate');
@@ -471,7 +471,7 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function (message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(so.TakerGets.value, VALUE);
       assert.strictEqual(so.TakerGets.currency, HEX_CURRENCY);
       assert.strictEqual(so.TakerGets.issuer, ISSUER);
@@ -523,7 +523,7 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function (message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(so.TakerPays.value, VALUE);
       assert.strictEqual(so.TakerPays.currency, HEX_CURRENCY);
       assert.strictEqual(so.TakerPays.issuer, ISSUER);
@@ -609,9 +609,9 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
-      assert((so.Flags & ripple.Transaction.flags.OfferCreate.Sell) > 0);
+      assert((so.Flags & radr.Transaction.flags.OfferCreate.Sell) > 0);
 
       conn.send(fixtures.requestSubmitResponse(message, {
         hash: hash
@@ -643,9 +643,9 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
-      assert((so.Flags & ripple.Transaction.flags.OfferCreate.Passive) > 0);
+      assert((so.Flags & radr.Transaction.flags.OfferCreate.Passive) > 0);
 
       conn.send(fixtures.requestSubmitResponse(message, {
         hash: hash
@@ -677,9 +677,9 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
-      assert((so.Flags & ripple.Transaction.flags.OfferCreate.FillOrKill) > 0);
+      assert((so.Flags & radr.Transaction.flags.OfferCreate.FillOrKill) > 0);
 
       conn.send(fixtures.requestSubmitResponse(message, {
         hash: hash
@@ -711,9 +711,9 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
-      assert((so.Flags & ripple.Transaction.flags.OfferCreate.ImmediateOrCancel) > 0);
+      assert((so.Flags & radr.Transaction.flags.OfferCreate.ImmediateOrCancel) > 0);
 
       conn.send(fixtures.requestSubmitResponse(message, {
         hash: hash
@@ -745,9 +745,9 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
-      assert.strictEqual(so.Flags & ripple.Transaction.flags.OfferCreate.Passive, 0);
+      assert.strictEqual(so.Flags & radr.Transaction.flags.OfferCreate.Passive, 0);
 
       conn.send(fixtures.requestSubmitResponse(message, {
         hash: hash
@@ -779,9 +779,9 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
-      assert.strictEqual(so.Flags & ripple.Transaction.flags.OfferCreate.FillOrKill, 0);
+      assert.strictEqual(so.Flags & radr.Transaction.flags.OfferCreate.FillOrKill, 0);
 
       conn.send(fixtures.requestSubmitResponse(message, {
         hash: hash
@@ -813,9 +813,9 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
-      assert.strictEqual(so.Flags & ripple.Transaction.flags.OfferCreate.ImmediateOrCancel, 0);
+      assert.strictEqual(so.Flags & radr.Transaction.flags.OfferCreate.ImmediateOrCancel, 0);
 
       conn.send(fixtures.requestSubmitResponse(message, {
         hash: hash
@@ -924,7 +924,7 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
       assert.strictEqual(so.Account, addresses.VALID);
       assert.strictEqual(so.TransactionType, 'OfferCreate');
@@ -972,7 +972,7 @@ suite('post orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
       assert.strictEqual(so.Account, addresses.VALID);
       assert.strictEqual(so.TransactionType, 'OfferCreate');
@@ -1015,7 +1015,7 @@ suite('post orders', function() {
 
     self.wss.once('request_submit', function(message, conn) {
       assert.strictEqual(message.command, 'submit');
-      conn.send(fixtures.rippledSubmitErrorResponse(message, {
+      conn.send(fixtures.radrdSubmitErrorResponse(message, {
         engine_result: 'tecUNFUNDED_OFFER',
         engine_result_code: 103,
         engine_result_message: 'Insufficient balance to fund created offer.',
@@ -1261,7 +1261,7 @@ suite('delete orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
       assert.strictEqual(so.TransactionType, 'OfferCancel');
       assert.strictEqual(so.OfferSequence, 99);
@@ -1348,7 +1348,7 @@ suite('delete orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
       assert.strictEqual(so.TransactionType, 'OfferCancel');
       assert.strictEqual(so.OfferSequence, 99);
@@ -1381,11 +1381,11 @@ suite('delete orders', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
       assert.strictEqual(so.TransactionType, 'OfferCancel');
       assert.strictEqual(so.OfferSequence, 99);
-      conn.send(fixtures.rippledCancelErrorResponse(message, {
+      conn.send(fixtures.radrdCancelErrorResponse(message, {
         engine_result: 'temBAD_SEQUENCE',
         engine_result_code: -283,
         engine_result_message: 'Malformed: Sequence is not in the past.',

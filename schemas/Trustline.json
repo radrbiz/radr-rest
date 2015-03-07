@@ -1,16 +1,16 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Trustline",
-  "description": "A simplified Trustline object used by the ripple-rest API",
+  "description": "A simplified Trustline object used by the radr-rest API",
   "type": "object",
   "properties": {
     "account": {
       "description": "The account from whose perspective this trustline is being viewed",
-      "$ref": "RippleAddress"
+      "$ref": "RadrAddress"
     },
     "counterparty": {
       "description": "The other party in this trustline",
-      "$ref": "RippleAddress"
+      "$ref": "RadrAddress"
     },
     "currency": {
       "description": "The code of the currency in which this trustline denotes trust",

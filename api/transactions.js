@@ -1,6 +1,6 @@
 var _           = require('lodash');
 var async       = require('async');
-var ripple      = require('ripple-lib');
+var radr      = require('radr-lib');
 var validator   = require('./../lib/schema-validator');
 var remote      = require('./../lib/remote.js');
 var dbinterface = require('./../lib/db-interface.js');
@@ -219,7 +219,7 @@ function getTransactionAndRespond(request, response, next) {
  *  @param {Remote} remote
  *  @param {/lib/db-interface} dbinterface
  *
- *  @param {RippleAddress} account
+ *  @param {RadrAddress} account
  *  @param {Hex-encoded String|ASCII printable character String} identifier
  *  @param {Function} callback
  *
@@ -241,8 +241,8 @@ function getTransaction(account, identifier, callback) {
   async.waterfall(steps, callback);
 
   function validateOptions(async_callback) {
-    if (account && !ripple.UInt160.is_valid(account)) {
-      return callback(new errors.InvalidRequestError('Invalid parameter: account. Must be a valid Ripple Address'));
+    if (account && !radr.UInt160.is_valid(account)) {
+      return callback(new errors.InvalidRequestError('Invalid parameter: account. Must be a valid Radr Address'));
     }
 
     if (!_.isString(identifier)) {
@@ -350,7 +350,7 @@ function getTransaction(account, identifier, callback) {
  *
  *  @param {Remote} remote
  *  @param {/lib/db-interface} dbinterface
- *  @param {RippleAddress} options.account
+ *  @param {RadrAddress} options.account
  *  @param {Number} [-1] options.ledger_index_min
  *  @param {Number} [-1] options.ledger_index_max
  *  @param {Boolean} [false] options.earliestFirst
@@ -392,13 +392,13 @@ function getAccountTransactions(options, response, callback) {
   function validateOptions(async_callback) {
     if (!options.account) {
       return async_callback(new errors.InvalidRequestError('Missing parameter: account. ' +
-        'Must supply a valid Ripple Address to query account transactions')
+        'Must supply a valid Radr Address to query account transactions')
       );
     }
 
-    if (!ripple.UInt160.is_valid(options.account)) {
+    if (!radr.UInt160.is_valid(options.account)) {
       return async_callback(new errors.InvalidRequestError('Invalid parameter: account. ' +
-        'Must supply a valid Ripple Address to query account transactions')
+        'Must supply a valid Radr Address to query account transactions')
       );
     }
 
@@ -456,7 +456,7 @@ function getAccountTransactions(options, response, callback) {
  *
  *  @param {Remote} remote
  *  @param {/lib/db-interface} dbinterface
- *  @param {RippleAddress} options.account
+ *  @param {RadrAddress} options.account
  *  @param {Number} [-1] options.ledger_index_min
  *  @param {Number} [-1] options.ledger_index_max
  *  @param {Boolean} [false] options.earliestFirst
@@ -471,7 +471,7 @@ function getAccountTransactions(options, response, callback) {
  */
 function getLocalAndRemoteTransactions(options, callback) {
 
-  function queryRippled(callback) {
+  function queryRadrd(callback) {
     getAccountTx(remote, options, function(error, results) {
       if (error) {
         callback(error);
@@ -494,7 +494,7 @@ function getLocalAndRemoteTransactions(options, callback) {
   };
 
   var transactionSources = [ 
-    queryRippled, 
+    queryRadrd,
     queryDB
   ];
 
@@ -517,8 +517,8 @@ function getLocalAndRemoteTransactions(options, callback) {
  *  @param {Array of transactions in JSON format} transactions
  *  @param {Boolean} [false] options.exclude_failed
  *  @param {Array of Strings} options.types Possible values are "payment", "offercreate", "offercancel", "trustset", "accountset"
- *  @param {RippleAddress} options.source_account
- *  @param {RippleAddress} options.destination_account
+ *  @param {RadrAddress} options.source_account
+ *  @param {RadrAddress} options.destination_account
  *  @param {String} options.direction Possible values are "incoming", "outgoing"
  *
  *  @returns {Array of transactions in JSON format} filtered_transactions
@@ -604,7 +604,7 @@ function compareTransactions(first, second, earliestFirst) {
  *  Wrapper around the standard ripple-lib requestAccountTx function
  *
  *  @param {Remote} remote
- *  @param {RippleAddress} options.account
+ *  @param {RadrAddress} options.account
  *  @param {Number} [-1] options.ledger_index_min
  *  @param {Number} [-1] options.ledger_index_max
  *  @param {Boolean} [false] options.earliestFirst

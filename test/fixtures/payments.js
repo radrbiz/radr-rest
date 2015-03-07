@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var addresses = require('./../fixtures').addresses;
 var paths = require('./paths');
-var SerializedObject = require('ripple-lib').SerializedObject;
+var SerializedObject = require('radr-lib').SerializedObject;
 
 var fromAccount   = addresses.VALID;
 var fromSecret    = addresses.SECRET;
@@ -762,7 +762,7 @@ module.exports.requestSubmitResponse = function(request, options) {
   );
 };
 
-module.exports.rippledSuccessResponse = function(request, options) {
+module.exports.radrdSuccessResponse = function(request, options) {
   options = options || {};
   _.defaults(options, {
     LastLedgerSequence: 9036180,
@@ -841,7 +841,7 @@ module.exports.rippledSuccessResponse = function(request, options) {
   );
 };
 
-module.exports.rippledSubmitErrorResponse = function(request, options) {
+module.exports.radrdSubmitErrorResponse = function(request, options) {
   options = options || {};
   _.defaults(options, {
     LastLedgerSequence: 9036180,
@@ -878,7 +878,7 @@ module.exports.rippledSubmitErrorResponse = function(request, options) {
   );
 };
 
-module.exports.rippledSubscribeRequest = function(request, lastLedger) {
+module.exports.radrdSubscribeRequest = function(request, lastLedger) {
   return JSON.stringify({
     id: request.id,
     command: 'subscribe',
@@ -888,7 +888,7 @@ module.exports.rippledSubscribeRequest = function(request, lastLedger) {
   });
 };
 
-module.exports.rippledSubcribeResponse = function(request) {
+module.exports.radrdSubcribeResponse = function(request) {
   return JSON.stringify({
     id: request.id,
     result: {},
@@ -897,7 +897,7 @@ module.exports.rippledSubcribeResponse = function(request) {
   });
 };
 
-module.exports.rippledValidatedErrorResponse = function(request, options) {
+module.exports.radrdValidatedErrorResponse = function(request, options) {
   options = options || {};
   _.defaults(options, {
     LastLedgerSequence: 9036180,
