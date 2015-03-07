@@ -1,4 +1,4 @@
-var RL = require('ripple-lib')
+var RL = require('radr-lib')
 var SerializedObject = RL.SerializedObject;
 
 var accounts = {}

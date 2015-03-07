@@ -1,6 +1,6 @@
 var _           = require('lodash');
 var assert      = require('assert-diff');
-var ripple      = require('ripple-lib');
+var radr        = require('radr-lib');
 var testutils   = require('./testutils');
 var fixtures    = require('./fixtures').payments;
 var errors      = require('./fixtures').errors;
@@ -203,7 +203,7 @@ suite('post payments', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
       assert.strictEqual(so.Fee, '5000000');
       conn.send(fixtures.requestSubmitResponse(message, {
@@ -300,7 +300,7 @@ suite('post payments', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
       assert.strictEqual(so.Fee, '5000000');
       conn.send(fixtures.requestSubmitResponse(message, {
@@ -707,7 +707,7 @@ suite('post payments', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
       assert.strictEqual(so.LastLedgerSequence, 9036185);
       conn.send(fixtures.requestSubmitResponse(message, { LastLedgerSequence: 9036185 }));
@@ -739,7 +739,7 @@ suite('post payments', function() {
     self.wss.once('request_submit', function(message, conn) {
       assert.strictEqual(message.command, 'submit');
 
-      conn.send(fixtures.rippledSubmitErrorResponse(message, {
+      conn.send(fixtures.radrdSubmitErrorResponse(message, {
         Fee: '15',
         engineResult: 'telINSUF_FEE_P',
         engineResultCode: '-394',
@@ -796,7 +796,7 @@ suite('post payments', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
       assert.strictEqual(so.Fee, '12');
       conn.send(fixtures.requestSubmitResponse(message, { Fee: '12' }));
@@ -822,7 +822,7 @@ suite('post payments', function() {
     self.wss.once('request_subscribe', function(message, conn) {
       assert.strictEqual(message.command, 'subscribe');
       assert.strictEqual(message.accounts[0], addresses.VALID);
-      conn.send(fixtures.rippledSubcribeResponse(message));
+      conn.send(fixtures.radrdSubcribeResponse(message));
     });
 
     self.wss.once('request_account_info', function(message, conn) {
@@ -832,10 +832,10 @@ suite('post payments', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(so.Amount, '1000000');
       assert.strictEqual(message.command, 'submit');
-      conn.send(fixtures.rippledSubmitErrorResponse(message, {
+      conn.send(fixtures.radrdSubmitErrorResponse(message, {
         engineResult: 'tecNO_DST_INSUF_XRP',
         engineResultCode: '125',
         engineResultMessage: 'This should not show up, is not a validated result',
@@ -843,7 +843,7 @@ suite('post payments', function() {
       }));
 
       process.nextTick(function () {
-        conn.send(fixtures.rippledValidatedErrorResponse(message, {
+        conn.send(fixtures.radrdValidatedErrorResponse(message, {
           engineResult: 'tecNO_DST_INSUF_XRP',
           engineResultCode: '125',
           engineResultMessage: 'Destination does not exist. Too little XRP sent to create it.',
@@ -871,7 +871,7 @@ suite('post payments', function() {
     self.wss.once('request_subscribe', function(message, conn) {
       assert.strictEqual(message.command, 'subscribe');
       assert.strictEqual(message.accounts[0], addresses.VALID);
-      conn.send(fixtures.rippledSubcribeResponse(message));
+      conn.send(fixtures.radrdSubcribeResponse(message));
     });
 
     self.wss.once('request_account_info', function(message, conn) {
@@ -881,9 +881,9 @@ suite('post payments', function() {
     });
 
     self.wss.once('request_submit', function(message, conn) {
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
       assert.strictEqual(message.command, 'submit');
-      conn.send(fixtures.rippledSubmitErrorResponse(message, {
+      conn.send(fixtures.radrdSubmitErrorResponse(message, {
         engineResult: 'terINSUF_FEE_B',
         engineResultCode: '-99',
         engineResultMessage: 'Account balance can\'t pay fee.',
@@ -910,7 +910,7 @@ suite('post payments', function() {
     self.wss.once('request_subscribe', function(message, conn) {
       assert.strictEqual(message.command, 'subscribe');
       assert.strictEqual(message.accounts[0], addresses.VALID);
-      conn.send(fixtures.rippledSubcribeResponse(message));
+      conn.send(fixtures.radrdSubcribeResponse(message));
     });
 
     self.wss.once('request_account_info', function(message, conn) {
@@ -921,7 +921,7 @@ suite('post payments', function() {
 
     self.wss.once('request_submit', function(message, conn) {
       assert.strictEqual(message.command, 'submit');
-      conn.send(fixtures.rippledSubmitErrorResponse(message, {
+      conn.send(fixtures.radrdSubmitErrorResponse(message, {
         engineResult: 'terNO_ACCOUNT',
         engineResultCode: '-96',
         engineResultMessage: 'The source account does not exist.',
@@ -1006,7 +1006,7 @@ suite('post payments', function() {
     self.wss.once('request_submit', function(message, conn) {
       assert.strictEqual(message.command, 'submit');
 
-      conn.send(fixtures.rippledSubmitErrorResponse(message, {
+      conn.send(fixtures.radrdSubmitErrorResponse(message, {
         engineResult: 'tecNO_DST_INSUF_XRP',
         engineResultCode: '125',
         engineResultMessage: 'Destination does not exist. Too little XRP sent to create it.',
@@ -1059,7 +1059,7 @@ suite('post payments', function() {
     self.wss.once('request_subscribe', function(message, conn) {
       assert.strictEqual(message.command, 'subscribe');
       assert.strictEqual(message.accounts[0], addresses.VALID);
-      conn.send(fixtures.rippledSubcribeResponse(message));
+      conn.send(fixtures.radrdSubcribeResponse(message));
     });
 
     self.wss.once('request_account_info', function(message, conn) {
@@ -1070,7 +1070,7 @@ suite('post payments', function() {
 
     self.wss.once('request_submit', function(message, conn) {
       assert.strictEqual(message.command, 'submit');
-      conn.send(fixtures.rippledSubmitErrorResponse(message, {
+      conn.send(fixtures.radrdSubmitErrorResponse(message, {
         engineResult: 'tecNO_DST_INSUF_XRP',
         engineResultCode: '125',
         engineResultMessage: 'This should not show up, is not a validated result',
@@ -1078,7 +1078,7 @@ suite('post payments', function() {
       }));
 
       process.nextTick(function () {
-        conn.send(fixtures.rippledValidatedErrorResponse(message, {
+        conn.send(fixtures.radrdValidatedErrorResponse(message, {
           engineResult: 'tecNO_DST_INSUF_XRP',
           engineResultCode: '125',
           engineResultMessage: 'Destination does not exist. Too little XRP sent to create it.',
@@ -1134,7 +1134,7 @@ suite('post payments', function() {
     self.wss.once('request_subscribe', function(message, conn) {
       assert.strictEqual(message.command, 'subscribe');
       assert.strictEqual(message.accounts[0], addresses.VALID);
-      conn.send(fixtures.rippledSubcribeResponse(message));
+      conn.send(fixtures.radrdSubcribeResponse(message));
     });
 
     self.wss.once('request_account_info', function(message, conn) {
@@ -1145,7 +1145,7 @@ suite('post payments', function() {
 
     self.wss.once('request_submit', function(message, conn) {
       assert.strictEqual(message.command, 'submit');
-      conn.send(fixtures.rippledSubmitErrorResponse(message, {
+      conn.send(fixtures.radrdSubmitErrorResponse(message, {
         engineResult: 'tecNO_DST_INSUF_XRP',
         engineResultCode: '125',
         engineResultMessage: 'This should not show up, is not a validated result',
@@ -1153,7 +1153,7 @@ suite('post payments', function() {
       }));
 
       process.nextTick(function () {
-        conn.send(fixtures.rippledValidatedErrorResponse(message, {
+        conn.send(fixtures.radrdValidatedErrorResponse(message, {
           engineResult: 'tecNO_DST_INSUF_XRP',
           engineResultCode: '125',
           engineResultMessage: 'Destination does not exist. Too little XRP sent to create it.',

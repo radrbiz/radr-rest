@@ -1,5 +1,5 @@
 var assert = require('assert');
-var ripple = require('ripple-lib');
+var radr = require('radr-lib');
 var testutils = require('./testutils');
 var fixtures = require('./fixtures').settings;
 var errors = require('./fixtures').errors;
@@ -80,7 +80,7 @@ suite('post settings', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'));
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'AccountSet');
       assert.strictEqual(so.LastLedgerSequence, lastLedger);
@@ -500,10 +500,10 @@ suite('post settings', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'));
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'AccountSet');
-      assert.strictEqual(so.Flags & ripple.Transaction.flags.AccountSet.RequireDestTag, 0);
+      assert.strictEqual(so.Flags & radr.Transaction.flags.AccountSet.RequireDestTag, 0);
 
       conn.send(fixtures.submitSettingsResponse(message, {
         hash: hash
@@ -536,10 +536,10 @@ suite('post settings', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'));
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'AccountSet');
-      assert((so.Flags & ripple.Transaction.flags.AccountSet.OptionalDestTag) > 0);
+      assert((so.Flags & radr.Transaction.flags.AccountSet.OptionalDestTag) > 0);
 
       conn.send(fixtures.submitSettingsResponse(message, {
         hash: hash
@@ -572,7 +572,7 @@ suite('post settings', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'));
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'AccountSet');
       assert.strictEqual(so.Domain, '');
@@ -608,7 +608,7 @@ suite('post settings', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'));
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'AccountSet');
       assert.strictEqual(so.EmailHash, new Array(32 + 1).join('0'));
@@ -644,7 +644,7 @@ suite('post settings', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'));
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'AccountSet');
       assert.strictEqual(so.WalletLocator, new Array(64 + 1).join('0'));
@@ -680,7 +680,7 @@ suite('post settings', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'));
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'AccountSet');
       assert.strictEqual(so.TransferRate, 0);
@@ -716,7 +716,7 @@ suite('post settings', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'));
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransactionType, 'AccountSet');
       assert.strictEqual(so.ClearFlag, 6);
@@ -780,7 +780,7 @@ suite('post settings', function() {
       assert.strictEqual(message.command, 'submit');
       assert(message.hasOwnProperty('tx_blob'));
 
-      var so = new ripple.SerializedObject(message.tx_blob).to_json();
+      var so = new radr.SerializedObject(message.tx_blob).to_json();
 
       assert.strictEqual(so.TransferRate, 1200000000);
 

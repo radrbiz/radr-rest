@@ -1,7 +1,7 @@
 var _                       = require('lodash');
 var async                   = require('async');
 var bignum                  = require('bignumber.js');
-var ripple                  = require('ripple-lib');
+var radr                  = require('radr-lib');
 var transactions            = require('./transactions');
 var validator               = require('./../lib/schema-validator');
 var remote                  = require('./../lib/remote.js');
@@ -100,12 +100,12 @@ function submitPayment(request, response, next) {
       return callback(new InvalidRequestError('Invalid parameter: client_resource_id. Must be a string of ASCII-printable characters. Note that 256-bit hex strings are disallowed because of the potential confusion with transaction hashes.'));
     }
 
-    if (!ripple.UInt160.is_valid(payment.source_account)) {
-      return callback(new InvalidRequestError('Invalid parameter: source_account. Must be a valid Ripple address'));
+    if (!radr.UInt160.is_valid(payment.source_account)) {
+      return callback(new InvalidRequestError('Invalid parameter: source_account. Must be a valid Radr address'));
     }
 
-    if (!ripple.UInt160.is_valid(payment.destination_account)) {
-      return callback(new InvalidRequestError('Invalid parameter: destination_account. Must be a valid Ripple address'));
+    if (!radr.UInt160.is_valid(payment.destination_account)) {
+      return callback(new InvalidRequestError('Invalid parameter: destination_account. Must be a valid Radr address'));
     }
     // Tags
     if (payment.source_tag && (!validator.isValid(payment.source_tag, 'UINT32'))) {
@@ -171,7 +171,7 @@ function submitPayment(request, response, next) {
       return callback(new InvalidRequestError('Invalid parameter: partial_payment. Must be a boolean'));
     }
 
-    // direct ripple
+    // direct Ripple
     if (payment.hasOwnProperty('no_direct_ripple') && typeof payment.no_direct_ripple !== 'boolean') {
       return callback(new InvalidRequestError('Invalid parameter: no_direct_ripple. Must be a boolean'));
     }
@@ -256,11 +256,11 @@ function submitPayment(request, response, next) {
 
 /**
  *  Retrieve the details of a particular payment from the Remote or
- *  the local database and return it in the ripple-rest Payment format.
+ *  the local database and return it in the radr-rest Payment format.
  *
  *  @param {Remote} remote
  *  @param {/lib/db-interface} dbinterface
- *  @param {RippleAddress} req.params.account
+ *  @param {RadrAddress} req.params.account
  *  @param {Hex-encoded String|ASCII printable character String} req.params.identifier
  *  @param {Express.js Response} res
  *  @param {Express.js Next} next
@@ -276,8 +276,8 @@ function getPayment(request, response, next) {
     if (!options.account) {
       invalid = 'Missing parameter: account. Must provide account to get payment details';
     }
-    if (!ripple.UInt160.is_valid(options.account)) {
-      invalid = 'Parameter is not a valid Ripple address: account';
+    if (!radr.UInt160.is_valid(options.account)) {
+      invalid = 'Parameter is not a valid Radr address: account';
     }
     if (!options.identifier) {
       invalid = 'Missing parameter: hash or client_resource_id. '+
@@ -295,7 +295,7 @@ function getPayment(request, response, next) {
     }
   };
 
-  // If the transaction was not in the outgoing_transactions db, get it from rippled
+  // If the transaction was not in the outgoing_transactions db, get it from radrd
   function getTransaction(callback) {
     transactions.getTransaction(request.params.account, request.params.identifier, function(error, transaction) {
       callback(error, transaction);
@@ -321,15 +321,15 @@ function getPayment(request, response, next) {
 };
 
 /**
- *  Formats the local database transaction into ripple-rest Payment format
+ *  Formats the local database transaction into radr-rest Payment format
  *
- *  @param {RippleAddress} account
+ *  @param {RadrAddress} account
  *  @param {Transaction} transaction
  *  @param {Function} callback
  *
  *  @callback
  *  @param {Error} error
- *  @param {RippleRestTransaction} transaction
+ *  @param {RadrRestTransaction} transaction
  */
 function formatPaymentHelper(account, transaction, callback) {
   function checkIsPayment(callback) {
@@ -368,9 +368,9 @@ function formatPaymentHelper(account, transaction, callback) {
       });
     } else {
       callback(new NotFoundError('Payment Not Found. This may indicate that the payment was never validated and written into '
-        + 'the Ripple ledger and it was not submitted through this ripple-rest instance. '
-        + 'This error may also be seen if the databases of either ripple-rest '
-        + 'or rippled were recently created or deleted.'));
+        + 'the Radr ledger and it was not submitted through this radr-rest instance. '
+        + 'This error may also be seen if the databases of either radr-rest '
+        + 'or radrd were recently created or deleted.'));
     }
   };
 
@@ -393,9 +393,9 @@ function formatPaymentHelper(account, transaction, callback) {
  *
  *  @param {Remote} remote
  *  @param {/lib/db-interface} dbinterface
- *  @param {RippleAddress} req.params.account
- *  @param {RippleAddress} req.query.source_account
- *  @param {RippleAddress} req.query.destination_account
+ *  @param {RadrAddress} req.params.account
+ *  @param {RadrAddress} req.query.source_account
+ *  @param {RadrAddress} req.query.destination_account
  *  @param {String "incoming"|"outgoing"} req.query.direction
  *  @param {Number} [-1] req.query.start_ledger
  *  @param {Number} [-1] req.query.end_ledger
@@ -513,9 +513,9 @@ function getAccountPayments(request, response, next) {
  *
  *  @param {Remote} remote
  *  @param {/lib/db-interface} dbinterface
- *  @param {RippleAddress} req.params.source_account
+ *  @param {RadrAddress} req.params.source_account
  *  @param {Amount Array ["USD r...,XRP,..."]} req.query.source_currencies Note that Express.js middleware replaces "+" signs with spaces. Clients should use "+" signs but the values here will end up as spaces
- *  @param {RippleAddress} req.params.destination_account
+ *  @param {RadrAddress} req.params.destination_account
  *  @param {Amount "1+USD+r..."} req.params.destination_amount_string
  *  @param {Express.js Response} res
  *  @param {Express.js Next} next
@@ -531,21 +531,21 @@ function getPathFind(request, response, next) {
   };
 
   if (!params.source_account) {
-    next(new InvalidRequestError('Missing parameter: source_account. Must be a valid Ripple address'));
+    next(new InvalidRequestError('Missing parameter: source_account. Must be a valid Radr address'));
     return;
   }
 
   if (!params.destination_account) {
-    next(new InvalidRequestError('Missing parameter: destination_account. Must be a valid Ripple address'));
+    next(new InvalidRequestError('Missing parameter: destination_account. Must be a valid Radr address'));
     return;
   }
 
-  if (!ripple.UInt160.is_valid(params.source_account)) {
-    return next(new errors.InvalidRequestError('Parameter is not a valid Ripple address: account'));
+  if (!radr.UInt160.is_valid(params.source_account)) {
+    return next(new errors.InvalidRequestError('Parameter is not a valid Radr address: account'));
   }
 
-  if (!ripple.UInt160.is_valid(params.destination_account)) {
-    return next(new errors.InvalidRequestError('Parameter is not a valid Ripple address: destination_account'));
+  if (!radr.UInt160.is_valid(params.destination_account)) {
+    return next(new errors.InvalidRequestError('Parameter is not a valid Radr address: destination_account'));
   }
 
   // Parse destination amount
@@ -556,13 +556,13 @@ function getPathFind(request, response, next) {
 
   params.destination_amount = utils.parseCurrencyQuery(request.params.destination_amount_string);
 
-  if (!ripple.UInt160.is_valid(params.source_account)) {
-    next(new InvalidRequestError('Invalid parameter: source_account. Must be a valid Ripple address'));
+  if (!radr.UInt160.is_valid(params.source_account)) {
+    next(new InvalidRequestError('Invalid parameter: source_account. Must be a valid Radr address'));
     return;
   }
 
-  if (!ripple.UInt160.is_valid(params.destination_account)){
-    next(new InvalidRequestError('Invalid parameter: destination_account. Must be a valid Ripple address'));
+  if (!radr.UInt160.is_valid(params.destination_account)){
+    next(new InvalidRequestError('Invalid parameter: destination_account. Must be a valid Radr address'));
     return;
   }
 
@@ -587,7 +587,7 @@ function getPathFind(request, response, next) {
           currency: currencyIssuerArray[0],
           issuer: currencyIssuerArray[1]
         };
-        if (validator.isValid(currencyObject.currency, 'Currency') && ripple.UInt160.is_valid(currencyObject.issuer)) {
+        if (validator.isValid(currencyObject.currency, 'Currency') && radr.UInt160.is_valid(currencyObject.issuer)) {
           params.source_currencies.push(currencyObject);
         } else {
           next(new InvalidRequestError('Invalid parameter: source_currencies. Must be a list of valid currencies'));
@@ -631,14 +631,14 @@ function getPathFind(request, response, next) {
       callback(null, pathfindResults);
     });
 
-    function reconnectRippled() {
+    function reconnectRadrd() {
       remote.disconnect(function() {
         remote.connect();
       });
     };
     request.timeout(serverLib.CONNECTION_TIMEOUT, function() {
       request.removeAllListeners();
-      reconnectRippled();
+      reconnectRadrd();
       callback(new TimeOutError('Path request timeout'));
     });
     request.request();

@@ -1,7 +1,7 @@
 var _                       = require('lodash');
 var Promise                 = require('bluebird');
 var async                   = require('async');
-var ripple                  = require('ripple-lib');
+var radr                  = require('radr-lib');
 var transactions            = require('./transactions.js');
 var SubmitTransactionHooks  = require('./../lib/submit_transaction_hooks.js');
 var remote                  = require('./../lib/remote.js');
@@ -31,7 +31,7 @@ const DefaultPageLimit = 200;
  *
  *  @query
  *  @param {String ISO 4217 Currency Code} [request.query.currency] - only request trustlines with given currency
- *  @param {RippleAddress} [request.query.counterparty] - only request trustlines with given counterparty
+ *  @param {RadrAddress} [request.query.counterparty] - only request trustlines with given counterparty
  *  @param {String} [request.query.marker] - start position in response paging
  *  @param {Number String} [request.query.limit] - max results per response
  *  @param {Number String} [request.query.ledger] - identifier
@@ -56,11 +56,11 @@ function getTrustLines(request, response, next) {
   var currencyRE = new RegExp(options.currency ? ('^' + options.currency.toUpperCase() + '$') : /./);
 
   function validateOptions(options) {
-    if (!ripple.UInt160.is_valid(options.account)) {
-      return Promise.reject(new errors.InvalidRequestError('Parameter is not a valid Ripple address: account'));
+    if (!radr.UInt160.is_valid(options.account)) {
+      return Promise.reject(new errors.InvalidRequestError('Parameter is not a valid Radr address: account'));
     }
-    if (options.counterparty && !ripple.UInt160.is_valid(options.counterparty)) {
-      return Promise.reject(new errors.InvalidRequestError('Parameter is not a valid Ripple address: counterparty'));
+    if (options.counterparty && !radr.UInt160.is_valid(options.counterparty)) {
+      return Promise.reject(new errors.InvalidRequestError('Parameter is not a valid Radr address: counterparty'));
     }
     if (options.currency && !validator.isValid(options.currency, 'Currency')) {
       return Promise.reject(new errors.InvalidRequestError('Parameter is not a valid currency: currency'));
@@ -158,7 +158,7 @@ function getTrustLines(request, response, next) {
  *  @param {String} request.body.secret
  *
  *  @query
- *  @param {String "true"|"false"} request.query.validated Used to force request to wait until rippled has finished validating the submitted transaction
+ *  @param {String "true"|"false"} request.query.validated Used to force request to wait until radrd has finished validating the submitted transaction
  *
  *  @param {Express.js Response} response
  *  @param {Express.js Next} next
@@ -190,8 +190,8 @@ function addTrustLine(request, response, next) {
   });
 
   function validateParams(callback) {
-    if (!ripple.UInt160.is_valid(params.account)) {
-      return callback(new errors.InvalidRequestError('Parameter is not a valid Ripple address: account'));
+    if (!radr.UInt160.is_valid(params.account)) {
+      return callback(new errors.InvalidRequestError('Parameter is not a valid Radr address: account'));
     }
     if (typeof params.trustline !== 'object') {
       return callback(new errors.InvalidRequestError('Parameter missing: trustline'));
@@ -211,8 +211,8 @@ function addTrustLine(request, response, next) {
     if (!params.trustline.counterparty) {
       return callback(new errors.InvalidRequestError('Parameter missing: trustline.counterparty'));
     }
-    if (!ripple.UInt160.is_valid(params.trustline.counterparty)) {
-      return callback(new errors.InvalidRequestError('Parameter is not a Ripple address: trustline.counterparty'));
+    if (!radr.UInt160.is_valid(params.trustline.counterparty)) {
+      return callback(new errors.InvalidRequestError('Parameter is not a Radr address: trustline.counterparty'));
     }
     if (!/^(undefined|number)$/.test(typeof params.trustline.quality_in)) {
       return callback(new errors.InvalidRequestError('Parameter must be a number: trustline.quality_in'));

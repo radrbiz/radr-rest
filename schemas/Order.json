@@ -6,7 +6,7 @@
   "properties": {
     "account": {
       "description": "The Ripple account address of the order's creator",
-      "$ref": "RippleAddress"
+      "$ref": "RadrAddress"
     },
     "buy": {
       "description": "If set to true the order it indicates that the creator is looking to receive the base_amount in exchange for the counter_amount. If undefined or set to false it indicates that the creator is looking to sell the base_amount to receive the counter_amount",

@@ -9,7 +9,7 @@ var utils     = require('./lib/utils.js');
 var port = config.get('port') || 5990;
 var host = config.get('host');
 
-logger.info('ripple-rest (v' + utils.getPackageVersion() + ')');
+logger.info('radr-rest (v' + utils.getPackageVersion() + ')');
 
 function loadSSLConfig() {
   var keyPath  = config.get('ssl').key_path || './certs/server.key';

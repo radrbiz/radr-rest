@@ -32,9 +32,9 @@ module.exports.serverInfoResponse = function(request) {
 
 module.exports.RESTServerInfoResponse = JSON.stringify({
   success: true,
-  api_documentation_url: 'https://github.com/ripple/ripple-rest',
-  rippled_server_url: 'ws://localhost:5995',
-  rippled_server_status: {
+  api_documentation_url: 'https://github.com/radr/radr-rest',
+  radrd_server_url: 'ws://localhost:5995',
+  radrd_server_status: {
     build_version: '0.24.0-rc1',
     complete_ledgers: '32570-6595042',
     hostid: 'ARTS',
@@ -61,10 +61,10 @@ module.exports.RESTServerConnectedResponse = JSON.stringify({
 
 module.exports.RESTServerIndexResponse = JSON.stringify({
   success: true,
-  name: 'ripple-rest',
+  name: 'radr-rest',
   package_version: pJson.version,
   version: '1',
-  documentation: 'https://github.com/ripple/ripple-rest',
+  documentation: 'https://github.com/radr/radr-rest',
   endpoints: {
     wallet_new: '/v1/wallet/new',
     payment_paths: '/v1/accounts/{address}/payments/paths/{destination_account}/{destination_amount as value+currency or value+currency+issuer}',
@@ -79,7 +79,7 @@ module.exports.RESTServerIndexResponse = JSON.stringify({
     account_orders: '/v1/accounts/{address}/orders/',
     account_order_transaction: '/v1/accounts/{address}/orders/{hash}',
     account_order_book: '/v1/accounts/{address}/order_book/{base as currency+issuer}/{counter as currency+issuer}',
-    ripple_transactions: '/v1/transactions/{hash}',
+    radr_transactions: '/v1/transactions/{hash}',
     server_status: '/v1/server',
     server_connected: '/v1/server/connected',
     transaction_fee: '/v1/transaction-fee',

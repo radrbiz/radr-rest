@@ -9,9 +9,9 @@
     "cert_path": "./certs/server.crt",
     "reject_unauthorized": true
   },
-  "db_path": "./ripple-rest.db",
+  "db_path": "./radr-rest.db",
   "max_transaction_fee": 1000000,
-  "rippled_servers": [
-    "wss://s1.ripple.com:443"
+  "radrd_servers": [
+    "wss://s1.radr.biz:443"
   ]
 }

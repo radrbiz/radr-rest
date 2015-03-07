@@ -1,6 +1,6 @@
 var Promise   = require('bluebird');
 var async     = require('async');
-var ripple    = require('ripple-lib');
+var radr    = require('radr-lib');
 var remote    = require('./../lib/remote.js');
 var respond   = require('../lib/response-handler.js');
 var utils     = require('./../lib/utils');
@@ -19,11 +19,11 @@ const DefaultPageLimit = 200;
  *  Additionally, any limit lower than 10 will be bumped up to 10.
  *
  *  @url
- *  @param {RippleAddress} request.params.account - account to retrieve balances for
+ *  @param {RadrAddress} request.params.account - account to retrieve balances for
  *
  *  @query
  *  @param {String ISO 4217 Currency Code} [request.query.currency] - only request balances with given currency
- *  @param {RippleAddress} [request.query.counterparty] - only request balances with given counterparty
+ *  @param {RadrAddress} [request.query.counterparty] - only request balances with given counterparty
  *  @param {String} [request.query.marker] - start position in response paging
  *  @param {Number String} [request.query.limit] - max results per response
  *  @param {Number String} [request.query.ledger] - identifier
@@ -49,11 +49,11 @@ function getBalances(request, response, next) {
   .catch(next)
 
   function validateOptions(options) {
-    if (!ripple.UInt160.is_valid(options.account)) {
-      return Promise.reject(new InvalidRequestError('Parameter is not a valid Ripple address: account'));
+    if (!radr.UInt160.is_valid(options.account)) {
+      return Promise.reject(new InvalidRequestError('Parameter is not a valid Radr address: account'));
     }
-    if (options.counterparty && !ripple.UInt160.is_valid(options.counterparty)) {
-      return Promise.reject(new InvalidRequestError('Parameter is not a valid Ripple address: counterparty'));
+    if (options.counterparty && !radr.UInt160.is_valid(options.counterparty)) {
+      return Promise.reject(new InvalidRequestError('Parameter is not a valid Radr address: counterparty'));
     }
     if (options.currency && !validator.isValid(options.currency, 'Currency')) {
       return Promise.reject(new InvalidRequestError('Parameter is not a valid currency: currency'));

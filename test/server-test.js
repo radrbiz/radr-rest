@@ -1,5 +1,5 @@
 var assert = require('assert');
-var ripple = require('ripple-lib');
+var radr = require('radr-lib');
 var remote = require('../lib/remote');
 var testutils = require('./testutils');
 var fixtures = require('./fixtures').server;
@@ -78,7 +78,7 @@ suite('get server info', function() {
 
     self.app
     .get('/v1/server/connected')
-    .expect(testutils.checkBody(errors.RESTCannotConnectToRippleD))
+    .expect(testutils.checkBody(errors.RESTCannotConnectToRadrD))
     .expect(testutils.checkStatus(502))
     .expect(testutils.checkHeaders)
     .end(done);

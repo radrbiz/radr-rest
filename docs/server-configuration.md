@@ -1,4 +1,4 @@
-# Server Configuration for `ripple-rest` 
+# Server Configuration for `radr-rest`
 
 This document tracks all changes to the `config.json` format. If a new version is released the details will be updated here.
 
@@ -11,7 +11,7 @@ An example configuration file is provided [here](../config-example.json).
 ### Changes
 
 + Add `url_base` property to override the url base (protocol://host_name:port) that is used in url construction for rest responses
-   - e.g. `'url_base': 'https://api.ripple.com'` will yield a transaction status url of `https://api.ripple.com/v1/accounts/{account}/payments/{hash}`
+   - e.g. `'url_base': 'https://api.radr.com'` will yield a transaction status url of `https://api.radr.com/v1/accounts/{account}/payments/{hash}`
 
 ```js
 {
@@ -24,12 +24,12 @@ An example configuration file is provided [here](../config-example.json).
     'key_path': './certs/server.key',
     'cert_path': './certs/server.crt'
   },
-  'db_path': './ripple-rest.db',
+  'db_path': './radr-rest.db',
   'max_transaction_fee': 1000000,
-  'rippled_servers': [
-    'wss://s1.ripple.com:443'
+  'radrd_servers': [
+    'wss://s1.radr.com:443'
   ],
-  'url_base': 'https://api.ripple.com:443'
+  'url_base': 'https://api.radr.com:443'
 }
 ```
 
@@ -40,7 +40,7 @@ An example configuration file is provided [here](../config-example.json).
 + `ssl_enabled` - boolean to configure to server to host over SSL
 + `ssl` - if an object with `key_path` and `cert_path` are provided, the API server will be available over HTTPS
 + `max_transaction_fee` - the maximum fee you're willing to pay for a transaction, has to be a `Number`
-+ `rippled_servers` - an array of server objects indicating which `rippled` servers the API should connect to. These should be configured to point to your local `rippled` if you are running one, instead of `s_west.ripple.com`
++ `radrd_servers` - an array of server objects indicating which `radrd` servers the API should connect to. These should be configured to point to your local `radrd` if you are running one, instead of `s_west.radr.com`
 + `debug` - boolean to log debugging information
 + `url_base` - override the url base (protocol://host_name:port) that is used in url construction for rest responses
 
@@ -63,10 +63,10 @@ An example configuration file is provided [here](../config-example.json).
     'key_path': './certs/server.key',
     'cert_path': './certs/server.crt'
   },
-  'db_path': './ripple-rest.db',
+  'db_path': './radr-rest.db',
   'max_transaction_fee': 1000000,
-  'rippled_servers': [
-    'wss://s1.ripple.com:443'
+  'radrd_servers': [
+    'wss://s1.radr.com:443'
   ]
 }
 ```
@@ -78,7 +78,7 @@ An example configuration file is provided [here](../config-example.json).
 + `ssl_enabled` - boolean to configure to server to host over SSL
 + `ssl` - if an object with `key_path` and `cert_path` are provided, the API server will be available over HTTPS
 + `max_transaction_fee` - the maximum fee you're willing to pay for a transaction, has to be a `Number`
-+ `rippled_servers` - an array of server objects indicating which `rippled` servers the API should connect to. These should be configured to point to your local `rippled` if you are running one, instead of `s_west.ripple.com`
++ `radrd_servers` - an array of server objects indicating which `radrd` servers the API should connect to. These should be configured to point to your local `radrd` if you are running one, instead of `s_west.radr.com`
 + `debug` - boolean to log debugging information
 
 ----------
@@ -103,9 +103,9 @@ An example configuration file is provided [here](../config-example.json).
     'key_path': './certs/server.key',
     'cert_path': './certs/server.crt'
   },
-  'db_path': './ripple-rest.db',
-  'rippled_servers': [
-    'wss://s1.ripple.com:443'
+  'db_path': './radr-rest.db',
+  'radrd_servers': [
+    'wss://s1.radr.com:443'
   ]
 }
 ```
@@ -116,7 +116,7 @@ An example configuration file is provided [here](../config-example.json).
 + `dp_path` - path for sqlite3 to save the database to. Can be populated with `:memory:` to run an in-memory version of the sqlite db
 + `ssl_enabled` - boolean to configure to server to host over SSL
 + `ssl` - if an object with `key_path` and `cert_path` are provided, the API server will be available over HTTPS
-+ `rippled_servers` - an array of server objects indicating which `rippled` servers the API should connect to. These should be configured to point to your local `rippled` if you are running one, instead of `s_west.ripple.com`
++ `radrd_servers` - an array of server objects indicating which `radrd` servers the API should connect to. These should be configured to point to your local `radrd` if you are running one, instead of `s_west.radr.com`
 + `debug` - boolean to log debugging information
 
 ----------
@@ -133,14 +133,14 @@ An example configuration file is provided [here](../config-example.json).
   'PORT': 5990,
   'NODE_ENV': 'development',
   'HOST': 'localhost',
-  'DATABASE_URL': 'postgres://ripple_rest_user:password@localhost:5432/ripple_rest_db',
+  'DATABASE_URL': 'postgres://radr_rest_user:password@localhost:5432/radr_rest_db',
   'ssl': {
     'key_path': './certs/server.key',
     'cert_path': './certs/server.crt'
   },
-  'rippled_servers': [
+  'radrd_servers': [
     {
-      'host': 's_west.ripple.com',
+      'host': 's_west.radr.com',
       'port': 443,
       'secure': true
     }
@@ -155,7 +155,7 @@ An example configuration file is provided [here](../config-example.json).
 + `HOST` - the host the API server will be available on
 + `DATABASE_URL` - the URL used to connect to the PostgreSQL database
 + `ssl` - if an object with `key_path` and `cert_path` are provided, the API server will be available over HTTPS
-+ `rippled_servers` - an array of server objects indicating which `rippled` servers the API should connect to. These should be configured to point to your local `rippled` if you are running one, instead of `s_west.ripple.com`
++ `radrd_servers` - an array of server objects indicating which `radrd` servers the API should connect to. These should be configured to point to your local `radrd` if you are running one, instead of `s_west.radr.com`
 + `debug` - boolean to log debugging information
 
 ----------
@@ -168,14 +168,14 @@ An example configuration file is provided [here](../config-example.json).
   'PORT': 5990,
   'NODE_ENV': 'development',
   'HOST': 'localhost',
-  'DATABASE_URL': 'postgres://ripple_rest_user:password@localhost:5432/ripple_rest_db',
+  'DATABASE_URL': 'postgres://radr_rest_user:password@localhost:5432/radr_rest_db',
   'ssl': {
     'key_path': './certs/server.key',
     'cert_path': './certs/server.crt'
   },
-  'rippled_servers': [
+  'radrd_servers': [
     {
-      'host': 's_west.ripple.com',
+      'host': 's_west.radr.com',
       'port': 443,
       'secure': true
     }
@@ -189,6 +189,6 @@ An example configuration file is provided [here](../config-example.json).
 + `HOST` - the host the API server will be available on
 + `DATABASE_URL` - the URL used to connect to the PostgreSQL database
 + `ssl` - if an object with `key_path` and `cert_path` are provided, the API server will be available over HTTPS
-+ `rippled_servers` - an array of server objects indicating which `rippled` servers the API should connect to. These should be configured to point to your local `rippled` if you are running one, instead of `s_west.ripple.com`
++ `radrd_servers` - an array of server objects indicating which `radrd` servers the API should connect to. These should be configured to point to your local `radrd` if you are running one, instead of `s_west.radr.com`
 
 ----------

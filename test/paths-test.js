@@ -1,5 +1,5 @@
 var assert = require('assert');
-var ripple = require('ripple-lib');
+var radr = require('radr-lib');
 var _ = require('lodash');
 var testutils = require('./testutils');
 var fixtures = require('./fixtures').payments;
@@ -12,7 +12,7 @@ var Payments = require('./../api/payments');
 suite('get payment paths', function() {
   var self = this;
 
-  //self.wss: rippled mock
+  //self.wss: radrd mock
   //self.app: supertest-enabled REST handler
 
   setup(testutils.setup.bind(self));
@@ -34,7 +34,7 @@ suite('get payment paths', function() {
     .expect(testutils.checkBody(errors.RESTErrorResponse({
       type: 'invalid_request',
       error: 'restINVALID_PARAMETER',
-      message: 'Parameter is not a valid Ripple address: account'
+      message: 'Parameter is not a valid Radr address: account'
     })))
     .end(done);
   });
@@ -55,7 +55,7 @@ suite('get payment paths', function() {
     .expect(testutils.checkBody(errors.RESTErrorResponse({
       type: 'invalid_request',
       error: 'restINVALID_PARAMETER',
-      message: 'Parameter is not a valid Ripple address: destination_account'
+      message: 'Parameter is not a valid Radr address: destination_account'
     })))
     .end(done);
   });
