@@ -504,7 +504,7 @@ module.exports.RESTTransactionResponse = function(options) {
       source_balance_changes: [
         {
           value: '-1.101208',
-          currency: 'XRP',
+          currency: 'VRP',
           issuer: ''
         }
       ],
@@ -517,7 +517,7 @@ module.exports.RESTTransactionResponse = function(options) {
       ],
       order_changes: [
         {
-          taker_pays: { currency: 'XRP', counterparty: '', value: '-1.101198' },
+          taker_pays: { currency: 'VRP', counterparty: '', value: '-1.101198' },
           taker_gets:
           { currency: 'USD',
             counterparty: addresses.COUNTERPARTY,
@@ -555,7 +555,7 @@ module.exports.RESTAccountTransactionsResponse = function(options) {
           source_tag: '',
           source_amount: {
             value: '1.112209',
-            currency: 'XRP',
+            currency: 'VRP',
             issuer: ''
           },
           source_slippage: '0',
@@ -577,7 +577,7 @@ module.exports.RESTAccountTransactionsResponse = function(options) {
           source_balance_changes: [
             {
               value: '-1.101208',
-              currency: 'XRP',
+              currency: 'VRP',
               issuer: ''
             }
           ],
@@ -589,7 +589,7 @@ module.exports.RESTAccountTransactionsResponse = function(options) {
             }
           ],
           order_changes: [
-            { taker_pays: { currency: 'XRP', counterparty: '', value: '-1.101198' },
+            { taker_pays: { currency: 'VRP', counterparty: '', value: '-1.101198' },
               taker_gets:
               { currency: 'USD',
                 counterparty: addresses.COUNTERPARTY,
@@ -647,7 +647,7 @@ module.exports.RESTTransactionResponseComplexCurrencies = function(options) {
       source_balance_changes: [
         {
           value: '-0.012',
-          currency: 'XRP',
+          currency: 'VRP',
           issuer: ''
         },
         {
@@ -678,7 +678,7 @@ module.exports.payment = function(options) {
     secret: addresses.SECRET,
     clientResourceId: '1',
     value: '1',
-    currency: 'XRP',
+    currency: 'VRP',
     issuer: ''
   });
 
@@ -1023,7 +1023,7 @@ module.exports.destinationTagNeededResponse = function(request) {
               type_hex: '0000000000000001'
             },
             {
-              currency: 'XRP',
+              currency: 'VRP',
               type: 16,
               type_hex: '0000000000000010'
             },
@@ -1041,7 +1041,7 @@ module.exports.destinationTagNeededResponse = function(request) {
               type_hex: '0000000000000001'
             },
             {
-              currency: 'XRP',
+              currency: 'VRP',
               type: 16,
               type_hex: '0000000000000010'
             },

@@ -380,7 +380,7 @@ module.exports.paymentTx = function(options) {
 module.exports.paymentRest = {
   source_account: addresses.VALID,
   source_tag: '',
-  source_amount: { value: '1.112209', currency: 'XRP', issuer: '' },
+  source_amount: { value: '1.112209', currency: 'VRP', issuer: '' },
   source_slippage: '0',
   destination_account: addresses.ISSUER,
   destination_tag: '',
@@ -396,7 +396,7 @@ module.exports.paymentRest = {
   result: 'tesSUCCESS',
   timestamp: '2013-03-12T23:56:50.000Z',
   fee: '0.00001',
-  source_balance_changes: [ { value: '-1.101208', currency: 'XRP', issuer: '' } ],
+  source_balance_changes: [ { value: '-1.101208', currency: 'VRP', issuer: '' } ],
   destination_balance_changes:
     [ { value: '0.001',
       currency: 'USD',
@@ -1633,9 +1633,9 @@ module.exports.parsedOfferCancelTx = {
      type: 'cancel',
      sequence: 22,
      cancel_sequence: 20 },
-  balance_changes: [ { counterparty: '', currency: 'XRP', value: '-0.012' } ],
+  balance_changes: [ { counterparty: '', currency: 'VRP', value: '-0.012' } ],
   order_changes:
-   [ { taker_pays: { currency: 'XRP', counterparty: '', value: '0' },
+   [ { taker_pays: { currency: 'VRP', counterparty: '', value: '0' },
        taker_gets:
         { currency: 'JPY',
           counterparty: 'r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN',

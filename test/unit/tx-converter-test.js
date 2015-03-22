@@ -31,7 +31,7 @@ suite('unit - converter - Tx to Rest', function() {
 
       assert.deepEqual(payment.source_balance_changes, [
         { value: '-0.834999999999999', currency: 'EUR', issuer: 'r3PDtZSa5LiYp1Ysn1vMuMzB59RzV3W9QH' },
-        { value: '-0.015', currency: 'XRP', issuer: '' }
+        { value: '-0.015', currency: 'VRP', issuer: '' }
       ]);
 
       assert.deepEqual(payment.destination_balance_changes, [

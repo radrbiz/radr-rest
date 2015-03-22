@@ -937,7 +937,7 @@ suite('post orders', function() {
     .post('/v1/accounts/' + addresses.VALID + '/orders')
     .send(fixtures.order({
       taker_gets: {
-        currency: 'XRP',
+        currency: 'VRP',
         value: '100000',
         counterparty: ''
       }
@@ -946,7 +946,7 @@ suite('post orders', function() {
       hash: hash,
       last_ledger: lastLedger,
       taker_gets: {
-        currency: 'XRP',
+        currency: 'VRP',
         counterparty: '',
         value: '100000'
       }
@@ -985,7 +985,7 @@ suite('post orders', function() {
     .post('/v1/accounts/' + addresses.VALID + '/orders')
     .send(fixtures.order({
       taker_pays: {
-        currency: 'XRP',
+        currency: 'VRP',
         value: '100000'
       }
     }))
@@ -995,7 +995,7 @@ suite('post orders', function() {
       hash: hash,
       last_ledger: lastLedger,
       taker_pays: {
-        currency: 'XRP',
+        currency: 'VRP',
         counterparty: '',
         value: '100000'
       }

@@ -99,7 +99,7 @@ function getBalances(request, response, next) {
       accountInfoRequest.once('success', function(result) {
         lines.push({
           value: utils.dropsToXrp(result.account_data.Balance),
-          currency: 'XRP',
+          currency: 'VRP',
           counterparty: ''
         });
 

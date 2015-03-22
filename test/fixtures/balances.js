@@ -415,7 +415,7 @@ module.exports.RESTAccountBalancesResponse = function(options) {
     ledger: options.ledger,
     validated: options.validated,
     balances: [
-      { value: '922.913243', currency: 'XRP', counterparty: '' },
+      { value: '922.913243', currency: 'VRP', counterparty: '' },
       { value: '0', currency: 'ASP', counterparty: 'r3vi7mWxru9rJCxETCyA1CHvzL96eZWx5z' },
       { value: '0', currency: 'XAU', counterparty: 'r3vi7mWxru9rJCxETCyA1CHvzL96eZWx5z' },
       { value: '2.497605752725159', currency: 'USD', counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q' },
@@ -484,7 +484,7 @@ module.exports.RESTAccountBalancesXRPResponse = function(options) {
     ledger: options.ledger,
     validated: options.validated,
     balances: [
-      { value: '922.913243', currency: 'XRP', counterparty: '' }
+      { value: '922.913243', currency: 'VRP', counterparty: '' }
     ]
   });
 };
