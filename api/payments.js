@@ -57,12 +57,12 @@ function submitPayment(request, response, next) {
     params[param] = request.body[param];
   });
 
-  params.max_fee = Number(request.body.max_fee) > 0 ? utils.xrpToDrops(request.body.max_fee) : void(0);
-  params.fixed_fee = Number(request.body.fixed_fee) > 0 ? utils.xrpToDrops(request.body.fixed_fee) : void(0);
+  params.max_fee = request.body.max_fee ? utils.xrpToDrops(request.body.max_fee) : void(0);
+  params.fixed_fee = request.body.fixed_fee ? utils.xrpToDrops(request.body.fixed_fee) : void(0);
 
-  if (params.payment.destination_amount && params.payment.destination_amount.currency !== 'XRP' && _.isEmpty(params.payment.destination_amount.issuer)) {
-    params.payment.destination_amount.issuer = params.payment.destination_account;
-  }
+  //if (params.payment.destination_amount && (params.payment.destination_amount.currency !== 'VRP' || params.payment.destination_amount.currency !== 'VBC') && _.isEmpty(params.payment.destination_amount.issuer)) {
+  //  params.payment.destination_amount.issuer = params.payment.destination_account;
+  //}
 
   var options = {
     secret: params.secret,
@@ -125,15 +125,15 @@ function submitPayment(request, response, next) {
     }
 
     // No issuer for XRP
-    if (payment.destination_amount && payment.destination_amount.currency.toUpperCase() === 'XRP' && payment.destination_amount.issuer) {
-      return callback(new InvalidRequestError('Invalid parameter: destination_amount. XRP cannot have issuer'));
+    if (payment.destination_amount && (payment.destination_amount.currency.toUpperCase() === 'VRP' || payment.destination_amount.currency.toUpperCase() === 'VBC') && payment.destination_amount.issuer) {
+      return callback(new InvalidRequestError('Invalid parameter: destination_amount. VRP/VBC cannot have issuer'));
     }
-    if (payment.source_amount && payment.source_amount.currency.toUpperCase() === 'XRP' && payment.source_amount.issuer) {
-      return callback(new InvalidRequestError('Invalid parameter: source_amount. XRP cannot have issuer'));
+    if (payment.source_amount && (payment.source_amount.currency.toUpperCase() === 'VRP' || payment.source_amount.currency.toUpperCase() === 'VBC') && payment.source_amount.issuer) {
+      return callback(new InvalidRequestError('Invalid parameter: source_amount. VRP/VBC cannot have issuer'));
     }
 
     // Must have issuer for non-XRP payments
-    if (payment.destination_amount && payment.destination_amount.currency.toUpperCase() !== 'XRP' && !payment.destination_amount.issuer) {
+    if (payment.destination_amount && (payment.destination_amount.currency.toUpperCase() !== 'VRP' || payment.destination_amount.currency.toUpperCase() !== 'VBC') && !payment.destination_amount.issuer) {
       return callback(new InvalidRequestError('Invalid parameter: destination_amount. Non-XRP payment must have an issuer'));
     }
 
@@ -231,8 +231,8 @@ function submitPayment(request, response, next) {
 
   function setTransactionParameters(transaction) {
     var ledgerIndex;
-    var maxFee = Number(params.max_fee);
-    var fixedFee = Number(params.fixed_fee);
+    var maxFee = Number(params.max_fee.value);
+    var fixedFee = Number(params.fixed_fee.value);
 
     if (Number(params.last_ledger_sequence) > 0) {
       ledgerIndex = Number(params.last_ledger_sequence);

@@ -13,7 +13,7 @@ module.exports = {
     serverStatus: Info.serverStatus,
     isConnected: Info.isConnected,
     fee: Info.fee,
-    uuid: Info.uuid,
+    uuid: Info.uuid
   },
 
   balances: {
