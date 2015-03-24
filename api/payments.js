@@ -231,8 +231,8 @@ function submitPayment(request, response, next) {
 
   function setTransactionParameters(transaction) {
     var ledgerIndex;
-    var maxFee = Number(params.max_fee.value);
-    var fixedFee = Number(params.fixed_fee.value);
+    var maxFee = Number(params.max_fee ? params.max_fee.value : void(0));
+    var fixedFee = Number(params.fixed_fee ? params.fixed_fee.value : void(0));
 
     if (Number(params.last_ledger_sequence) > 0) {
       ledgerIndex = Number(params.last_ledger_sequence);
