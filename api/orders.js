@@ -219,8 +219,8 @@ function placeOrder(request, response, next) {
   };
 
   function setTransactionParameters(transaction) {
-    var takerPays = params.order.taker_pays.currency !== 'XRP' ? params.order.taker_pays : utils.xrpToDrops(params.order.taker_pays.value);
-    var takerGets = params.order.taker_gets.currency !== 'XRP' ? params.order.taker_gets : utils.xrpToDrops(params.order.taker_gets.value);
+    var takerPays = params.order.taker_pays.currency !== 'VRP' || params.order.taker_pays.currency !== 'VBC' ? params.order.taker_pays : utils.xrpToDrops(params.order.taker_pays);
+    var takerGets = params.order.taker_gets.currency !== 'VRP' || params.order.taker_pays.currency !== 'VBC' ? params.order.taker_gets : utils.xrpToDrops(params.order.taker_gets);
 
     transaction.offerCreate(params.account, radr.Amount.from_json(takerPays), radr.Amount.from_json(takerGets));
 

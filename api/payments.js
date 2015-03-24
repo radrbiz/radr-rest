@@ -608,8 +608,8 @@ function getPathFind(request, response, next) {
     var pathfindParams = {
       src_account: params.source_account,
       dst_account: params.destination_account,
-      dst_amount: (params.destination_amount.currency === 'XRP' ?
-        utils.xrpToDrops(params.destination_amount.value) :
+      dst_amount: ((params.destination_amount.currency === 'VRP' || params.destination_amount.currency === 'VBC') ?
+        utils.xrpToDrops(params.destination_amount) :
         params.destination_amount)
     };
     if (typeof pathfindParams.dst_amount === 'object' && !pathfindParams.dst_amount.issuer) {
