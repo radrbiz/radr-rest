@@ -133,8 +133,8 @@ function submitPayment(request, response, next) {
     }
 
     // Must have issuer for non-XRP payments
-    if (payment.destination_amount && (payment.destination_amount.currency.toUpperCase() !== 'VRP' || payment.destination_amount.currency.toUpperCase() !== 'VBC') && !payment.destination_amount.issuer) {
-      return callback(new InvalidRequestError('Invalid parameter: destination_amount. Non-XRP payment must have an issuer'));
+    if (payment.destination_amount && (payment.destination_amount.currency.toUpperCase() !== 'VRP' && payment.destination_amount.currency.toUpperCase() !== 'VBC') && !payment.destination_amount.issuer) {
+      return callback(new InvalidRequestError('Invalid parameter: destination_amount. Non-VBC/VRP payment must have an issuer'));
     }
 
     // Slippage
