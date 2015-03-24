@@ -68,14 +68,14 @@ function getBalances(request, response, next) {
     }
 
     if (options.currency) {
-      if (options.currency === 'XRP') {
-        return getXRPBalance(options);
+      if (options.currency === 'VRP' && options.currency === 'VBC') {
+        return getNativeBalances(options);
       } else {
         return getLineBalances(options);
       }
     }
 
-    return getXRPBalance(options)
+    return getNativeBalances(options)
     .then(function(XRPResult) {
       options.XRPLines = XRPResult.lines;
       return Promise.resolve(options);
@@ -87,7 +87,7 @@ function getBalances(request, response, next) {
     });
   }
 
-  function getXRPBalance(options) {
+  function getNativeBalances(options) {
     var promise = new Promise(function(resolve, reject) {
       var accountInfoRequest = remote.requestAccountInfo({
         account: options.account,
@@ -98,6 +98,7 @@ function getBalances(request, response, next) {
       accountInfoRequest.once('error', reject);
       accountInfoRequest.once('success', function(result) {
         lines.push(utils.dropsToXrp(result.account_data.Balance));
+        lines.push(utils.dropsToXrp(result.account_data.BalanceVBC));
         result.lines = lines;
         resolve(result);
       });
