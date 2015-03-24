@@ -76,13 +76,13 @@ function getBalances(request, response, next) {
     }
 
     return getNativeBalances(options)
-    .then(function(XRPResult) {
-      options.XRPLines = XRPResult.lines;
+    .then(function(NativeLines) {
+      options.NativeLines = (NativeLines).lines;
       return Promise.resolve(options);
     })
     .then(getLineBalances)
     .then(function(lineBalances) {
-      lineBalances.lines.unshift(options.XRPLines[0]);
+      lineBalances.lines = lineBalances.lines.concat(options.NativeLines);
       return Promise.resolve(lineBalances);
     });
   }
