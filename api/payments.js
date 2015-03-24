@@ -60,9 +60,14 @@ function submitPayment(request, response, next) {
   params.max_fee = request.body.max_fee ? utils.xrpToDrops(request.body.max_fee) : void(0);
   params.fixed_fee = request.body.fixed_fee ? utils.xrpToDrops(request.body.fixed_fee) : void(0);
 
-  //if (params.payment.destination_amount && (params.payment.destination_amount.currency !== 'VRP' || params.payment.destination_amount.currency !== 'VBC') && _.isEmpty(params.payment.destination_amount.issuer)) {
-  //  params.payment.destination_amount.issuer = params.payment.destination_account;
-  //}
+  if (params.payment.destination_amount && (params.payment.destination_amount.currency !== 'VRP' || params.payment.destination_amount.currency !== 'VBC') && _.isEmpty(params.payment.destination_amount.issuer)) {
+    params.payment.destination_amount.issuer = params.payment.destination_account;
+  }
+
+  // TODO: Fix this in radr-lib. For now, always set issuer of VBC to ACCOUNT_TWOFIFTYFIVE just as VRP is implicitly set to ACCOUNT_ZERO
+  if (params.payment.destination_amount && params.payment.destination_amount.currency === 'VBC')  {
+    params.payment.destination_amount.issuer = radr.UInt160.ACCOUNT_TWOFIFTYFIVE;
+  }
 
   var options = {
     secret: params.secret,
