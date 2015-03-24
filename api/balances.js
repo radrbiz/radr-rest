@@ -97,12 +97,7 @@ function getBalances(request, response, next) {
       var lines = [];
       accountInfoRequest.once('error', reject);
       accountInfoRequest.once('success', function(result) {
-        lines.push({
-          value: utils.dropsToXrp(result.account_data.Balance),
-          currency: 'VRP',
-          counterparty: ''
-        });
-
+        lines.push(utils.dropsToXrp(result.account_data.Balance));
         result.lines = lines;
         resolve(result);
       });
