@@ -68,6 +68,9 @@ function submitPayment(request, response, next) {
   if (params.payment.destination_amount && params.payment.destination_amount.currency === 'VBC')  {
     params.payment.destination_amount.issuer = radr.UInt160.ACCOUNT_TWOFIFTYFIVE;
   }
+  if (params.payment.source_amount && params.payment.source_amount.currency === 'VBC')  {
+    params.payment.source_amount.issuer = radr.UInt160.ACCOUNT_TWOFIFTYFIVE;
+  }
 
   var options = {
     secret: params.secret,
