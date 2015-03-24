@@ -97,8 +97,8 @@ function getBalances(request, response, next) {
       var lines = [];
       accountInfoRequest.once('error', reject);
       accountInfoRequest.once('success', function(result) {
-        lines.push(utils.dropsToXrp(result.account_data.Balance));
-        lines.push(utils.dropsToXrp(result.account_data.BalanceVBC));
+        lines.push(utils.dropsToXrp(radr.Amount.from_json(result.account_data.Balance+'/VRP')));
+        lines.push(utils.dropsToXrp(radr.Amount.from_json(result.account_data.BalanceVBC + '/VBC')));
         result.lines = lines;
         resolve(result);
       });
