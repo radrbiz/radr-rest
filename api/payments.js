@@ -133,7 +133,7 @@ function submitPayment(request, response, next) {
     if (payment.destination_amount && (payment.destination_amount.currency.toUpperCase() === 'VRP' || payment.destination_amount.currency.toUpperCase() === 'VBC') && payment.destination_amount.issuer) {
       return callback(new InvalidRequestError('Invalid parameter: destination_amount. VRP/VBC cannot have issuer'));
     }
-    if (payment.source_amount && (payment.source_amount.currency.toUpperCase() === 'VRP' || payment.source_amount.currency.toUpperCase() === 'VBC') && payment.source_amount.issuer) {
+    if (payment.source_amount && (payment.source_amount.currency.toUpperCase() === 'VRP') && payment.source_amount.issuer) {
       return callback(new InvalidRequestError('Invalid parameter: source_amount. VRP/VBC cannot have issuer'));
     }
 
