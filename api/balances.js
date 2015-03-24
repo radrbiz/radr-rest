@@ -97,7 +97,6 @@ function getBalances(request, response, next) {
       var lines = [];
       accountInfoRequest.once('error', reject);
       accountInfoRequest.once('success', function(result) {
-        debugger;
         lines.push(utils.dropsToXrp({
           value: result.account_data.Balance,
           currency: 'VRP'
